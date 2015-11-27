@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <title>Login</title>
+  <!--  <link rel='stylesheet' href='/stylesheets/style.css' /> -->
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />    
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<style>
+	td { padding: 10px;}
+	</style>
+  </head>
+  <body style="background:#edf0f5">
+  <form action="/afterSignIn" method="post">
+    <!-- This panel is for login -->
+  <div style="background-color: #3B5998;display:block;height:120px;width:100%">
+             <div style="float:left;padding-left:100px;color:white;font-weight:bold">
+             <br>
+                <h1>facebook</h1>              
+             </div>
+		     <div style="float:right;padding-right:100px">
+		             <table>
+		             <tr>
+		                <td> <label style="color:white">Email Id</label> </td>
+		                <td> <label style="color:white">Password</label> <td>
+		             </tr>
+		             <tr>
+		             	<td>  
+                      <input type="email" class="form-control" name="inputUsername" id="inputUsername" placeholder="Email Id">
+                        </td>
+		               <td>
+	                      <input type="password" class="form-control" name="inputPassword" id="inputPassword" placeholder="Password">
+                       </td>  
+                       <td>
+                           <button type="submit" class="btn btn-success">Log in</button>
+                       </td> 
+	                </tr>
+	                  
+	              </table>  
+	              <label name="error" style="color:white"><%= errorlabel %></label>  
+	          </div>    
+	              <br>   
+        </div>
+        
+ </form>
+ <br><br>
+  <form action="/signUp" method="post">
+
+     <div style="float:right;padding-right:100px">
+      <h4>Are you new to Facebook? </h4>
+     <h2>Sign Up</h2>
+		          <table>
+		             <tr>
+		             	<td>  
+                      <input type="text" class="form-control" name="inputfname" id="inputfname" placeholder="First Name">
+                        </td>
+		               <td>
+	                      <input type="text" class="form-control" name="inputlname" id="inputlname" placeholder="Last Name">
+                       </td>  
+                     </tr>
+                     <tr>
+                         <td colspan="2">
+                         <input type="email" class="form-control" name="inputemailid" id="inputemailid" placeholder="Email Address">
+                         </td>
+                     </tr>
+                     <tr>
+                          <td colspan="2">
+                          <input type="password" class="form-control" name="inputpassword" id="inputpassword" placeholder="Enter Password">
+                          </td>
+                     </tr>
+                     <tr>  
+                       <td>
+                           <button type="submit" class="btn btn-success">Sign Up</button>
+                       </td> 
+	                </tr>         	                 	              	                  
+	              </table>  
+	          </div>    
+  </form>
+ 
+ </body>
+ 
+</html>
