@@ -36,12 +36,15 @@ if ('development' == app.get('env')) {
 }
 
 
+
 app.get('/', home.welcome);
 app.post('/basicSignUp',home.basicSignUp);
 app.post('/addrSignup',home.addrSignup);
 app.post('/addrInterests',home.addrInterests);
 
 //app.get('/', home.signin);
+app.get('/showSignup',home.showSignup);
+app.get('/', home.signin);
 app.get('/profile',home.profile);
 app.get('/ajax', ajax.demo);
 app.get('/signin', home.signin);

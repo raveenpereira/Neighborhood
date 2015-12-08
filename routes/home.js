@@ -7,7 +7,7 @@ var isviewProfile = false;
 
 
 exports.welcome = function(req, res){
-	  res.render('addrSignup');
+	  res.render('HomePage');
 };
 
 exports.basicSignUp = function(req,res){
@@ -73,7 +73,7 @@ exports.addrSignup = function(req,res){
 			throw err;
 		}
 	},insertUser);
-	res.render('addrSignup',{message:"Successfully signed up! You can now login with your email and password.",errormessage:'',emailid:email});
+	res.render('interests',{message:"Successfully signed up! You can now login with your email and password.",errormessage:'',emailid:email});
 	
 /*	var selectUser = "select emailid from user_table where emailid = '"+ email +"'";
 	mysql.fetchData(function(err,results){
@@ -543,6 +543,45 @@ exports.logout = function(req,res)
 	res.redirect('/');
 };
 
+//For SignUp redirection
+exports.showSignup = function(req,res)
+{
+	res.render('addrSignup');
+};
+
+exports.addrInterests = function(req,res){
+
+	var images = [];
+	var i;
+	images.push(req.param("img1"));
+	images.push(req.param("img2"));
+	images.push(req.param("img3"));
+	images.push(req.param("img4"));
+	images.push(req.param("img5"));
+	images.push(req.param("img6"));
+	images.push(req.param("img7"));
+	images.push(req.param("img8"));
+	images.push(req.param("img9"));
+	images.push(req.param("img10"));
+	images.push(req.param("img11"));
+	images.push(req.param("img12"));
+	images.push(req.param("img13"));
+	images.push(req.param("img14"));
+	images.push(req.param("img15"));
+	console.log('length: '+images.length);
+	for(i = 0; i < images.length; i++){
+		if(images[i] != undefined || images[i] != null){
+			var insertInterest= "insert into user_interests values ('"+ 1 +"','"+images[i]+"')";
+			console.log("Query is:"+insertInterest);
+			mysql.fetchData(function(err,results){
+				if(err){
+					throw err;
+				}
+			},insertInterest);
+		}
+	}
+	res.render('main',{message:"Successfully signed up! You can now login with your email and password.",errormessage:''});
+};
 
 exports.signin=signin;
 exports.afterSignIn=afterSignIn;
