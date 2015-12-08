@@ -1,0 +1,262 @@
+<html>
+  <head>
+  	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  	<!--<script src="AngularJS/main.js"></script> -->
+  	<script>
+      var app = angular.module('myApp', []);
+app.controller('mainCtrl', function($scope,$window,$http) {
+  
+ $scope.searchUsers = function()  {   
+     
+            $http.post('/searchUsers',{text:$scope.txtsearch}). 
+            then(function(response) {
+            var data = response.data;
+            $scope.userlist = data.userlist;
+            },function(response) {
+            console.log(response);
+            });
+  };
+
+$scope.createGroup = function() {
+
+       var groupname = $scope.gpname;  
+       var groupdesc = $scope.gpdesc;  
+      
+            $http.post('/createGroup',{name:groupname,desc:groupdesc}). 
+            then(function(response) {
+            var data = response.data;
+            var i = data.success;
+            if(i) {
+             $window.alert("group has been created"); 
+             $scope.fetchGroups();
+             $scope.gpname ="";
+             $scope.gpdesc = "";
+            }
+            },function(response) {
+            console.log(response);
+            });
+};
+
+$scope.addFriend = function(userid) {
+$window.alert("userid"+userid);
+};
+
+$scope.showposts = function()  {   
+
+           $http.get('/getAllPosts'). 
+            then(function(response) {
+            var data = response.data;
+            $scope.posts = data.posts;
+            },function(response) {
+            console.log(response);
+            });
+  };
+
+$scope.redirectToGrp = function(groupid,groupdesc,groupname) {
+$window.alert("group:"+groupid+"~~"+groupdesc);
+$http.post('/redirectToGrp',{ gid:groupid,desc:groupdesc,gname:groupname});
+}
+
+$scope.fetchGroups = function()  { 
+ 
+            $http.get('/getUserGroups'). 
+            then(function(response) {
+            var data = response.data;
+            $scope.groups = data.groups;
+            },function(response) {
+            console.log(response);
+            });
+  };
+
+$scope.getUserProfile = function(userid,name) {
+alert("user"+userid);
+//$rootScope.selectedProfileId = userid;
+//$rootScope.selectedProfileName = name;
+
+//alert($rootScope.selectedProfileId + $rootScope.selectedProfileName);
+ window.location.href = '/getUserProfile/'+userid;
+}
+
+
+$scope.getData = function() {
+$scope.fetchGroups();
+$scope.showposts();
+};
+
+});
+
+
+  	</script>
+  	<title><%= title %></title>
+<style>
+    .postarea {
+    min-height: 63px;
+    width:432px;
+    overflow:auto;
+    padding:5px;
+    }
+    .fixed {
+    position: fixed;
+    width: 100%;
+    }
+    .confirm {
+  width: 360px;
+  position: fixed;
+  left: auto; 
+  right: 100px;
+  
+   .border {
+    border-radius:1px;box-shadow: 1px 1px 0px #888888;
+    }
+}
+</style>
+  </head>
+  <body style="background:#edf0f5" ng-app="myApp" ng-controller="mainCtrl" ng-init="getData()">
+  <input type="hidden" ng-model="uid" id="uid" value="<%= id %>" />
+ <div class="fixed" style="background-color: #3B5998; height: 40px;z-index:100;display: inline">
+ <div style="padding-top:6px;padding-left:300px">
+  <input ng-model="txtsearch" type="text" size="55" placeholder="Search Facebook"/><button style="height:28px" data-toggle="modal" data-target="#frndModal" ng-click="searchUsers()"><span class="glyphicon glyphicon-search" /></button>
+ 
+<a href="/profile" style="color:white;padding-left:250px"> <%= name %> </a>	       
+<a href="#" style="color:white"> home </a>
+<a href="/logout" style="color:white"> logout </a>
+<buttton class="btn btn-default" style="width:20px;height:20px"><span class="glyphicon glyphicon-user" data-toggle="modal" data-target="#frndreqModal"/></button>
+</div>
+ </div>
+<div class="row">
+<div class="col-sm-2" style="padding-top:78px;left:20px;top:50px;">
+<div>
+Groups:
+<br>
+<form name="myform">
+<div ng-repeat="grp in groups">
+<a href="/redirectToGrp" ng-click="grpid={{ grp.group_id }}"><label id="{{ grp.group_id }}">{{ grp.groupname }}</label></a><br>
+</div>
+<input type="hidden" name="grpid" ng-model="grpid"/>
+</form>
+</div>
+<br>
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Create Group</button>
+</div>
+ <div class="col-sm-8" style="align:center;width:468px;padding-top:18px;left:160px;top:50px">
+ <div style="background-color:#ffffff;width:465px;padding-left:20px;padding-top:20px">
+    <p><textarea class="postarea" ng-model="message" placeholder="What's on your mind?"></textarea></p>
+
+<p>
+<button class="btn btn-primary"><span class="glyphicon glyphicon-pencil"/> Post</button>
+<button class="btn btn-primary"><span class="glyphicon glyphicon-trash"/> Clear</button>
+</p>
+<br>
+</div>
+ <div style="align:center;padding-top:10px;top:20px;position: relative">
+<div ng-repeat="post in posts" class="border">
+ <div style="width:468px;background-color:#ffffff"><p><a href="#" ng-click="getUserProfile(post.user_id,post.firstname)"> {{ post.firstname }} {{ post.lastname }}</a> shared this</p>
+      <p>
+      {{ post.postdesc }}
+     </p> 
+ </div>
+
+ </div>
+ 
+ </div>  
+ 
+ </div>
+ <div class="col-sm-2">
+
+ </div>
+
+
+ </div>
+
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #3B5998">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Group</h4>
+      </div>
+      <div class="modal-body">
+        <p>Enter Group Name: <input type="text" ng-model="gpname"/></p>
+        <p>Enter a Group description: <input type="text" ng-model="gpdesc"/></p>
+        <p>Add Members:<input ng-model="grpsearch" type="text" size="55" placeholder="Add Member"/><button style="height:28px"><span class="glyphicon glyphicon-search" /></button></p>
+        <p >
+        </p>
+      </div>
+      <div class="modal-footer">
+       <button type="button" class="btn btn-primary" ng-click="createGroup()">Create</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- modal ends -->
+
+<div id="frndModal" class="modal fade " role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #3B5998">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="color:white">Search Results</h4>
+      </div>
+      <div class="modal-body">
+      <form name="myform">
+      <div ng-repeat="usr in userlist">
+     <a href="#"> {{ usr.firstname }} {{ usr.lastname }}</a>
+
+      <button type="button" class="btn btn-success" ng-click="addFriend({{usr.user_id}})">Add friend</button>   
+      </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+       <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- frndreqModal -->
+
+<div id="frndreqModal" class="modal fade confirm" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+      <form name="myform">
+     <a href="#"> {{ usr.name }}</a>
+
+      <button type="button" class="btn btn-primary" style="background-color:#3B5998">Confirm</button>
+       <button type="button" class="btn btn-default" style="background-color:white">Delete Request</button>   
+       <br>  
+         <a href="#"> {{usr.name}}</a>
+
+      &nbsp&nbsp&nbsp&nbsp<button type="button" style="background-color:#3B5998"><label style="color:white">Confirm</label></button> 
+       <button type="button" style="background-color:white">Delete Request</button>   
+       
+      </div>
+      </form>
+      </div>
+ 
+    </div>
+
+  </div>
+</div>
+
+  </body>
+</html>
