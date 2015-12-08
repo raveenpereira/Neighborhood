@@ -80,7 +80,8 @@
    			location += "Longitude: " + place.geometry.location.lng();
 			document.getElementById('lblresult').innerHTML = location;
 			
-			
+			var addr = place.formatted_address.split(',')[0];
+			document.signupForm.addr.value = addr;
 			//setting in hidden variables
 			
 			document.signupForm.lat.value = place.geometry.location.lat().toFixed(3);
@@ -170,10 +171,11 @@
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" placeholder="choose a password...">
                         <label for="password">Confim Password</label>
-                        <input type="password" id="password" name="password" placeholder="Retype your password...">
+                        <input type="password" id="password1" name="confirmpassword" placeholder="Retype your password...">
                         <input type="hidden" name="lat"/>
                         <input type="hidden" name="lng"/>
                         <input type="hidden" name="zipcode"/>
+                        <input type="hidden" name="addr"/>
                         <label class="radio-inline">
                         <input type="radio" name="sex" value="F" id="inlineCheckbox2" value="female" required/>
                         Female
