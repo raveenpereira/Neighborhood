@@ -8,12 +8,13 @@ function getConnection(){
 	var connection = mysql.createConnection({
 	    host     : 'localhost',
 	    user     : 'root',
-	    password : 'goldie',
-	    database : 'neighborhood',
-	    port	 : 3306
+	    password : '',
+	    database : 'swarna',
+	    port	 : 3307
 	});
 	return connection;
 }
+
 function createConnectionPool(){	
 	for (var i = 0; i<MaxSize;i++)
 		{
@@ -21,6 +22,7 @@ function createConnectionPool(){
 		connectionPool.push(connection); 
         }
 }
+
 function isempty(pool)
 {
 if(pool.length >0 )

@@ -24,6 +24,12 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <style>
+        #video{
+            width: 100%;
+            min-height: 500px;
+        }
+    </style>
 </head>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
@@ -70,13 +76,13 @@
             <!-- Login Starts Here -->
                 <div class="LoginBox">
                     <section id="content">
-                        <form action="">
+                        <form action="/afterSignIn" method="post">
                             <h1 class>Login</h1>
                             <div>
-                                <input type="text" placeholder="Username" required="" id="username" />
+                                <input type="text" placeholder="Username" required="" id="inputUsername" name="inputUsername" />
                             </div>
                             <div>
-                                <input type="password" placeholder="Password" required="" id="password" />
+                                <input type="password" placeholder="Password" required="" id="inputPassword" name="inputPassword" />
                             </div>
                             <div>
                                 <input type="submit" value="Log in" />
@@ -96,9 +102,8 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <h2>About Neighborhood</h2>
-                <p>Grayscale is a free Bootstrap 3 theme created by Start Bootstrap. It can be yours right now, simply download the template on <a href="http://startbootstrap.com/template-overviews/grayscale/">the preview page</a>. The theme is open source, and you can use it for any purpose, personal or commercial.</p>
-                <p>This theme features stock photos by <a href="http://gratisography.com/">Gratisography</a> along with a custom Google Maps skin courtesy of <a href="http://snazzymaps.com/">Snazzy Maps</a>.</p>
-                <p>Grayscale includes full HTML, CSS, and custom JavaScript files along with LESS files for easy customization.</p>
+                <p></p>
+                <iframe id="video" src="https://www.youtube.com/embed/wI4JsUBeHUM"></iframe>
             </div>
         </div>
     </section>
@@ -122,9 +127,9 @@
     <section id="contact" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>Contact Start Bootstrap</h2>
-                <p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p>
-                <p><a href="mailto:feedback@startbootstrap.com">feedback@startbootstrap.com</a>
+                <h2>Contact Neighborhood</h2>
+                <p>Feel free to email us to provide some feedback on our features, give us suggestions for ideas, or to just say hello!</p>
+                <p><a href="mailto:feedback@startbootstrap.com">feedback@neighborhood.com</a>
                 </p>
                 <ul class="list-inline banner-social-buttons">
                     <li>

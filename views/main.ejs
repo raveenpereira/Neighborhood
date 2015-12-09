@@ -11,12 +11,11 @@
 
 
   	// var a =  document.getElementById("category").value;
-        var a="music";
+        var a="music || computer || dance || tennis";
         var oArgs = {
             app_key: "Cv6rM5zHHHjjPxhM",
            q: a,
-           c: a,
-           l: 95054
+           l: 95113
         };
 
         var content = '';
@@ -43,7 +42,7 @@
             }
 
             // Show Data on page
-           document.getElementById("menu").innerHTML=content;
+           document.getElementById("events").innerHTML=content;
         });
         }
   	
@@ -54,6 +53,7 @@ app.controller('mainCtrl', function($scope,$window,$http) {
  $scope.search = false;
  $scope.showflag1 = false;
  $scope.showflag2 = false;
+ 
  $scope.searchPosts = function()  {   
      
             $http.post('/searchPosts',{text:$scope.txtsearch}). 
@@ -61,6 +61,7 @@ app.controller('mainCtrl', function($scope,$window,$http) {
             var data = response.data;
             $scope.search = true;
             $scope.posts = data.posts;
+          //  alert("post:"+$scope.posts);
             },function(response) {
             console.log(response);
             });
@@ -158,7 +159,7 @@ $http.post('/redirectToGrp',{ gid:groupid,desc:groupdesc,gname:groupname});
 
 
 $scope.getUserProfile = function(userid,name) {
-alert("user"+userid);
+//alert("user"+userid);
 
  window.location.href = '/getUserProfile/'+userid;
 }
@@ -195,6 +196,9 @@ $scope.getRecommendations();
     border-radius:1px;box-shadow: 1px 1px 0px #f1f1f1;
     padding: 10px;
     }
+     .divborder {
+    border-radius:2px;box-shadow: 1px 1px 0px #a1a1a1;
+    }
     .btn-hollow {
     border-radius: 3px;
     -webkit-box-sizing: border-box;
@@ -230,21 +234,23 @@ $scope.getRecommendations();
   <body style="background:#ffffff" ng-app="myApp" ng-controller="mainCtrl" ng-init="getData()">
  	 <input type="hidden" ng-model="uid" id="uid" value="<%= id %>" />
  	<div class="fixed" style="background-color: #1e9e5e; height: 45px;z-index:100;display: inline">
- 		<div style="padding-top:6px;padding-left:400px">
-  			<input ng-model="txtsearch" type="text" size="40" placeholder="Search"/><button type="button" style="height:28px" ng-click="searchPosts()"><span class="glyphicon glyphicon-search" /></button>
+ 		<div style="padding-top:6px;padding-left:100px">
+  			 <span style="color:white;font-weight:bold" class="glyphicon glyphicon-home">Neighborhood</span><input style="margin-left:200px" ng-model="txtsearch" type="text" size="40" placeholder="Search"/><button type="button" style="height:28px" ng-click="searchPosts()"><span class="glyphicon glyphicon-search" /></button>
 	 	</div>
  	</div>
- 	<div style="background-color:#f1f1f1;height:200px;padding-top:28px"><h2>Hello <%= name %>,</div>
+ 	<div style="background-color:#f1f1f1;height:200px;padding-top:28px">
+ 	<div style="width:700px;background-color:#a9a9a9;color:white;margin-left:200px;padding-top:30px" class="divborder"><h2>Hello <%= name %>, </h2><p><h4>There are 13 of your neighbours using our app and connecting with others doing stuff like hiking, photography, carpooling...</h4>
+ 	</div>
+ 	</div>
 
 
 
   <!-- Proper tab -->
-  <div class="row">
+  <div class="row" style="left:20px">
  <div class="col-sm-4"> 
   <ul class="nav nav-pills nav-stacked" style="width:80%">
     			<li class="active"><a href="#home" data-toggle="pill" ng-click="showposts()"><span class="glyphicon glyphicon-home">&nbsp&nbspHome</a></li>
-    			<li><a href="/profile"><span class="glyphicon glyphicon-user">&nbsp&nbspProfile</a></li>
-    			<li><a href="#" onclick="getEvents()"><span class="glyphicon glyphicon-calendar">&nbsp&nbspEvents Calender</a></li>
+    			<li><a href="#menu" data-toggle="pill" ng-click=""><span class="glyphicon glyphicon-exclamation-sign">&nbsp&nbspCrime Watch</a></li>
     			<li><a href="#menu1" data-toggle="pill" ng-click="getMessages()"><span class="glyphicon glyphicon-envelope">&nbsp&nbspInbox</a></li>
     			<li><a href="#menu2" data-toggle="pill" ng-click="getNeighbours()"><span class="glyphicon glyphicon-user"><span class="glyphicon glyphicon-user"> Neighbours</a></li>
      			<li><a href="/logout"><span class="glyphicon glyphicon-off">&nbsp&nbspLog out</a></li>
@@ -252,16 +258,17 @@ $scope.getRecommendations();
    <br>
    <label>&nbsp&nbsp&nbsp&nbsp<span class="glyphicon glyphicon-tags"> CATEGORIES</label> 
    <br>
-   <a href="#" ng-click="getcatPosts(1)">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspGeneral</a>
+    <ul class="nav nav-pills nav-stacked" style="width:80%">
+        <li><a href="#" ng-click="getcatPosts(1)">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspGeneral</a></li>
+    <li><a href="#" ng-click="getcatPosts(2)">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspLooking for</a></li>
+    <li><a href="#" ng-click="getcatPosts(3)">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCrime & Safety</a></li>
+    <li><a href="#" ng-click="getcatPosts(4)">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspEvents</a></li>
+    </ul>
     <br>
-    <a href="#" ng-click="getcatPosts(2)">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspLooking for</a>
-    <br>
-    <a href="#" ng-click="getcatPosts(3)">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCrime & Safety</a>
-    <br>
-    <a href="#" ng-click="getcatPosts(4)">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspEvents</a>
-    <br> 
+    <button style="width:80%" class="btn btn-block" onclick="getEvents()" data-toggle="modal" data-target="#event-modal"><span class="glyphicon glyphicon-calendar">&nbsp&nbspEvents Calender</button>
+   <br>
      <label>&nbsp&nbsp&nbsp&nbsp<span class="glyphicon glyphicon-ok-circle"> RECOMMENDATIONS</label> 
-   					<ul ng-repeat="rec in recommendations">
+   					<ul ng-repeat="rec in recommendations" style="width:80%">
    	   					<li>
    	         				Your neighbour <b>{{ rec.firstname }} {{ rec.lastname }}</b> residing in  <b> {{ rec.address }} </b> is also interested in <b> {{ rec.interest }} </b>
    	         				Connect with <a href="#" ng-click="getUserProfile(rec.user_id,rec.firstname)"> {{ rec.firstname }} </a>
@@ -313,24 +320,55 @@ $scope.getRecommendations();
     </div>
     
     <div id="menu" class="tab-pane">
-       
+    <br>
+        <img src="/Images/crime.png" width="600px height="600px"> </img>
+        <br>
+        <p> A - Assault&nbsp&nbsp&nbsp S - Sexual Assault&nbsp&nbsp&nbsp T - Theft&nbsp&nbsp&nbsp V - Vehicle theft&nbsp&nbsp&nbspTV - Theft from vehicle&nbsp&nbsp&nbspB - Breaking and entering</p>
     </div>
     <div id="menu1" class="tab-pane">
-        <div ng-show="showflag1" ng-repeat="msg in messages">
-               <p> Message from <b>{{ msg.firstname }} {{ msg.lastname }} <b>     {{ msg.sentdate }} </p>
+    <br>
+        <div class="border" ng-show="showflag1" ng-repeat="msg in messages">
+               <p> Message from <b><a href="#">{{ msg.firstname }} {{ msg.lastname }}</a><b>     {{ msg.sentdate }} </p>
                <p> {{ msg.message }} </p>
+               <br>
         </div>
     </div>
     <div ng-show="showflag2" id="menu2" class="tab-pane">
-         <div ng-repeat="usr in neighbours">
+    <br>
+         <div class="border" ng-repeat="usr in neighbours">
                <p> <img class="profile" src="/Images/profile.jpeg" height="40px" width="40px"> {{ usr.firstname }} {{ usr.lastname }} </p>
                <p> resides in  {{ usr.address }} </p>
+               <br>
          </div>
     </div>
     
   </div>
 </div>
 </div>
+
+
+<!-- Modal -->
+<div id="event-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #1e9e5e">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Events you may be interested in</h4>
+      </div>
+      <div class="modal-body" id="events">
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-hollow" data-dismiss="modal">Done</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- modal ends -->
 
   </body>
 </html>
