@@ -4,190 +4,164 @@
 
     <head>
 
-        <meta charset="utf-8">
-        <title>Sign Up for Neighborhood</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="">
 
         <!-- CSS -->
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Oleo+Script:400,700'>
-        <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+        <link rel="stylesheet" href="/stylesheets/bootstrapSU.min.css">
         <link rel="stylesheet" href="/stylesheets/style.css">
-       <!-- <link rel="stylesheet" href="/stylesheets/main.css">-->
 
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
         <!--for maps-->
+        <style>
+            #map_canvas{
+                height: 300px;
+                width: 98%;
+            }
+            #register-container{
+                ;
+            }
+        </style>
+        <!--<script src="https://maps.googleapis.com/maps/api/js"></script>-->
         <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+        <script>
+            function initialize() {
+                var mapOptions = {
+                    center: new google.maps.LatLng(37.34800000, -121.88600000),
+                    zoom: 13,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map = new google.maps.Map(document.getElementById('map_canvas'),
+                        mapOptions);
+
+                var input = document.getElementById('searchTextField');
+                alert(input);
+
+                var autocomplete = new google.maps.places.Autocomplete(input);
+
+                autocomplete.bindTo('bounds', map);
+
+                var infowindow = new google.maps.InfoWindow();
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(37.34800000,-121.88600000),
+                    map: map
+                });
+
+                google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                    infowindow.close();
+                    var place = autocomplete.getPlace();
+                    if (place.geometry.viewport) {
+                        map.fitBounds(place.geometry.viewport);
+                    } else {
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(17);  // Why 17? Because it looks good.
+                    }
+
+                    var image = new google.maps.MarkerImage(
+                            place.icon,
+                            new google.maps.Size(71, 71),
+                            new google.maps.Point(20, 0),
+                            new google.maps.Point(10, 34),
+                            new google.maps.Size(35, 35));
+                    marker.setIcon(image);
+                    marker.setPosition(place.geometry.location);
+                    var location = "Address: " + place.formatted_address + "<br/>";
+                    location += "Latitude: " + place.geometry.location.lat() + "<br/>";
+                    location += "Longitude: " + place.geometry.location.lng();
+                    document.getElementById('lblresult').innerHTML = location;
+
+                    var addr = place.formatted_address.split(',')[0];
+                    document.signupForm.addr.value = addr;
+                    //setting in hidden variables
+
+                    document.signupForm.lat.value = place.geometry.location.lat().toFixed(3);
+                    document.signupForm.lng.value = place.geometry.location.lng().toFixed(3);
 
 
+
+                    var address = '';
+                    var zip_code = '';
+                    document.getElementById('zip_code').innerHTML=zip_code;
+                    if (place.address_components) {
+                        address = [
+                            (place.address_components[0] && place.address_components[0].short_name || ''),
+                            (place.address_components[1] && place.address_components[1].short_name || ''),
+                            (place.address_components[2] && place.address_components[2].short_name || '')
+                        ].join(' ');
+                        for (var i=0; i<place.address_components.length;i++)
+                        {
+                            for (var j=0;j<place.address_components[i].types.length;j++)
+                            {
+                                if (place.address_components[i].types[j] === "postal_code")
+                                {
+                                    zip_code = "Zipcode:" + place.address_components[i].long_name;
+                                    document.getElementById('zip_code').innerHTML=zip_code;
+                                    alert('inside'+zip_code);
+                                    var zip_code_value = place.address_components[i].long_name;
+                                }
+                            }
+                        }
+                    }
+
+                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+                    infowindow.open(map, marker);
+                    alert('outside'+zip_code);
+                    document.signupForm.zipcode.value = zip_code_value;
+                });
+
+                // Sets a listener on a radio button to change the filter type on Places
+                // Autocomplete.
+                function setupClickListener(id, types) {
+                    var radioButton = document.getElementById(id);
+                    google.maps.event.addDomListener(radioButton, 'click', function() {
+                        autocomplete.setTypes(types);
+                    });
+                }
+
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
         <!-- Close Maps -->
         <![endif]-->
-        <style>
-      body {
-        font-family: sans-serif;
-        font-size: 14px;
-      }
-      #map_canvas {
-        height: 400px;
-        width: 600px;
-        margin-top: 0.6em;
-      }
-    </style>
-         <script>
-   function initialize() {
-        var mapOptions = {
-          center: new google.maps.LatLng(37.34800000, -121.88600000),
-          zoom: 13,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById('map_canvas'),
-          mapOptions);
+        </head>
 
-        var input = document.getElementById('searchTextField');
-        var autocomplete = new google.maps.places.Autocomplete(input);
+    <body>
 
-        autocomplete.bindTo('bounds', map);
-
-        var infowindow = new google.maps.InfoWindow();
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(37.34800000,-121.88600000),
-          map: map
-        });
-
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
-          infowindow.close();
-          var place = autocomplete.getPlace();
-          if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-          } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(17);  // Why 17? Because it looks good.
-          }
-
-          var image = new google.maps.MarkerImage(
-              place.icon,
-              new google.maps.Size(71, 71),
-              new google.maps.Point(20, 0),
-              new google.maps.Point(10, 34),
-              new google.maps.Size(35, 35));
-          marker.setIcon(image);
-          marker.setPosition(place.geometry.location);
-			var location = "Address: " + place.formatted_address + "<br/>";
-			location += "Latitude: " + place.geometry.location.lat() + "<br/>";
-   			location += "Longitude: " + place.geometry.location.lng();
-			document.getElementById('lblresult').innerHTML = location;
-			
-			var addr = place.formatted_address.split(',')[0];
-			document.signupForm.addr.value = addr;
-			//setting in hidden variables
-			
-			document.signupForm.lat.value = place.geometry.location.lat().toFixed(3);
-			document.signupForm.lng.value = place.geometry.location.lng().toFixed(3);
-			
-       
-        
-          var address = '';
-          var zip_code = '';
-          document.getElementById('zip_code').innerHTML=zip_code;
-          if (place.address_components) {
-            address = [
-              (place.address_components[0] && place.address_components[0].short_name || ''),
-              (place.address_components[1] && place.address_components[1].short_name || ''),
-              (place.address_components[2] && place.address_components[2].short_name || '')
-            ].join(' ');
-            for (var i=0; i<place.address_components.length;i++)
-	   {
-              for (var j=0;j<place.address_components[i].types.length;j++)
-              {
-                if (place.address_components[i].types[j] === "postal_code")
-                {
-                  zip_code = "Zipcode:" + place.address_components[i].long_name;
-                  document.getElementById('zip_code').innerHTML=zip_code;
-                  alert('inside'+zip_code);
-                  var zip_code_value = place.address_components[i].long_name;
-                }
-              }
-	   }
-          }
-
-          infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-          infowindow.open(map, marker);
-           alert('outside'+zip_code);
-        document.signupForm.zipcode.value = zip_code_value;
-        });
-       
-        // Sets a listener on a radio button to change the filter type on Places
-        // Autocomplete.
-        function setupClickListener(id, types) {
-          var radioButton = document.getElementById(id);
-          google.maps.event.addDomListener(radioButton, 'click', function() {
-            autocomplete.setTypes(types);
-          });
-        }
-
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-  </head>
-  <body>
-  <header class="navbar-inverse">
-<div class="container">
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-   
-</header>
-
-	
-    <div class="jumbotron2">
-    <div>
-      <input id="searchTextField" type="text" size="50">
-    </div>
-	
-    <div id="map_canvas"></div>
-    <label id="lblresult"></label>
-    <div id="zip_code"></div>
-    </div>
-    
-    
-
+        <div class="register-container container">
+            </div>
             <div class="register span6">
-                    <form action="/addrSignup" name="signupForm" method="post">
+                <form action="/addrSignup" name="signupForm" method="post">
                         <h2>REGISTER TO <span class="green"><strong>Neighborhood</strong></span></h2>
                         <label for="firstname">First Name</label>
                         <input type="text" id="firstname" name="firstname" placeholder="enter your first name...">
                         <label for="lastname">Last Name</label>
-                        <input type="text" id="lastname" name="lastname" placeholder="enter your first name...">
+                        <input type="text" id="lastname" name="lastname" placeholder="enter your last name...">
                         <label for="email">Email</label>
-                        <input type="text" id="email" name="email" placeholder="enter your emailid...">
+                        <input type="text" id="username" name="username" placeholder="choose a username...">
                         <label for="dob">Date of Birth</label>
                         <div id="dateofbirth" class="Dobfield">
-                            <input id="month" type="tel" maxlength="2" placeholder="MM" name="birthday_month"/>/
-                            <input id="day" type="tel" maxlength="2" placeholder="DD" name="birthday_day"/> /
-                            <input id="year" type="tel" maxlength="4" placeholder="YYYY" name="birthday_year"/>
+                            <input id="month" type="tel" maxlength="2" placeholder="MM"/>/
+                            <input id="day" type="tel" maxlength="2" placeholder="DD"/> /
+                            <input id="year" type="tel" maxlength="4" placeholder="YYYY"/>
                         </div>
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" placeholder="choose a password...">
                         <label for="password">Confim Password</label>
-                        <input type="password" id="password1" name="confirmpassword" placeholder="Retype your password...">
-                        <input type="hidden" name="lat"/>
-                        <input type="hidden" name="lng"/>
-                        <input type="hidden" name="zipcode"/>
-                        <input type="hidden" name="addr"/>
-                        <label class="radio-inline">
-                        <input type="radio" name="sex" value="F" id="inlineCheckbox2" value="female" required/>
-                        Female
-                        </label>
-                        <label class="radio-inline">
-                             <input type="radio" name="sex" value="M" id="inlineCheckbox1" value="male" />
-                                    Male
-                        </label>
+                        <input type="password" id="password" name="password" placeholder="Retype your password...">
+                        <label>Enter Your Address</label>
+                        <input type="text" id="searchTextField" name="address" placeholder="Your Address..">
+                        <br>
+                        <div id="map_canvas">
+
+
+                        </div>
+
                         <button type="submit">SIGN ME UP</button>
                     </form>
                 </div>
-            </div>
+                <!--map Start-->
+                <!-->
         </div>
 
         <!-- Javascript -->
