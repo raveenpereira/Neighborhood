@@ -1,24 +1,8 @@
-<<<<<<< HEAD
+Apartment Connect
+CMPE272 Team Project
 
-
-# NodeExpress
-
-
-
-## Usage
-
-
-
-## Developing
-
-
-
-### Tools
-
-Created with [Nodeclipse](https://github.com/Nodeclipse/nodeclipse-1)
- ([Eclipse Marketplace](http://marketplace.eclipse.org/content/nodeclipse), [site](http://www.nodeclipse.org))   
-
-Nodeclipse is free open-source project that grows with your contributions.
-=======
-# CMPE272_PROJECT10
->>>>>>> 436bfb09201106c99a0dddfb915a74cfc10a787d
+Members:
+1. Revanth Penugonda
+2. Raveen Periera
+3. Sneha Ilangovan
+4. Swarna Karthik
